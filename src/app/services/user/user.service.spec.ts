@@ -1,7 +1,6 @@
-import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { UserService } from './user.service';
-import { afterEach } from 'selenium-webdriver/testing';
 
 describe('UserService', () => {
   let service: UserService;
@@ -55,7 +54,6 @@ describe('UserService', () => {
 
     expect(requestWrapper.request.method).toEqual('GET');
     expect(response).toEqual(mockUsers);
-
   }));
 
   // it('users array should not be empty', fakeAsync(() => {

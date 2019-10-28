@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-user-card',
@@ -8,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 export class UserCardComponent implements OnInit {
   public user: {[key: string]: any};
 
-  constructor() { }
+  constructor(public userService: UserService) { }
 
   ngOnInit() {
+  }
+
+  fetchUser(): void {
+    this.userService.getOne(1).subscribe(user => {
+      this.user = user;
+    });
   }
 
 }
