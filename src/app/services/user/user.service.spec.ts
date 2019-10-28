@@ -1,6 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { UserService } from './user.service';
+import { afterEach } from 'selenium-webdriver/testing';
 
 describe('UserService', () => {
   let service: UserService;
@@ -33,24 +34,36 @@ describe('UserService', () => {
 
     backend.expectOne({
       method: 'GET',
-      url: 'http://localhost:3000/users/1'
+      url: `${service.baseUrl}/1`
     }).flush(mockUser);
   });
 
-  it('should get all users', () => {
+  it('should get all users', fakeAsync(() => {
+    let response = null;
     const mockUsers = [{
       id: 1,
       firstName: 'John',
       lastName: 'Bonnes',
       age: 32
     }];
-    service.getAll().subscribe(users => {
-      expect(users).toEqual(mockUsers);
-    });
+    service.getAll().subscribe(users => response = users);
 
-    backend.expectOne({
-      method: 'GET',
-      url: 'http://localhost:3000/users'
-    }).flush(mockUsers);
-  });
+    const requestWrapper = backend.expectOne({url: service.baseUrl});
+    requestWrapper.flush(mockUsers);
+
+    tick();
+
+    expect(requestWrapper.request.method).toEqual('GET');
+    expect(response).toEqual(mockUsers);
+
+  }));
+
+  // it('users array should not be empty', fakeAsync(() => {
+  //   service.getAll().subscribe(users => {
+  //     console.log('users ', users);
+  //     expect(users).not.toBeNull();
+  //     expect(users.length).toBeGreaterThan(0);
+  //   });
+  //   flush();
+  // }));
 });

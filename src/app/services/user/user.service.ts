@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:3000/users';
+  baseUrl = 'http://localhost:3000/users';
   private user = {
     id: 1,
     name: 'Andrey',
